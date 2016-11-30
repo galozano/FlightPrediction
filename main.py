@@ -176,11 +176,16 @@ validateDataTime = testDF.copy()
 
 subsetPredictTime = validateDataTime[validateDataTime.columns.difference(['Delayed','ACTUAL_ELAPSED_TIME'])]
 #subsetPredictTime["Calculated"] = resultTime.predict(sm.add_constant(subsetPredict))
+subsetPredictTime["const"] = 1
 subsetPredictTime['Calculated'] = subsetPredictTime.apply(lambda row: (row * resultTime.params).sum(),axis=1)
+
 
 subsetPredictTime["ACTUAL_ELAPSED_TIME"] = validateDataTime["ACTUAL_ELAPSED_TIME"]
 subsetPredictTime["Difference"] = subsetPredictTime.apply(lambda row: abs(row.ACTUAL_ELAPSED_TIME - row.Calculated), axis=1)
 
+resultDelayed.params
+subsetPredictTime.columns
+subsetPredictTime.head()
 #------------------------------------------------
 # Calculate ROC -- Predicted Total Time (Testing set is used here)
 #------------------------------------------------
@@ -189,6 +194,8 @@ subsetPredictTime["Difference"] = subsetPredictTime.apply(lambda row: abs(row.AC
 roicTime = pd.DataFrame({"Values":range(int(subsetPredictTime["Difference"].min()),int(subsetPredictTime["Difference"].max()),10)})
 roicTime["Percentage"] = roicTime.apply(lambda row: len(subsetPredictTime[subsetPredictTime.Difference < row.Values]["Difference"]) / len(subsetPredictTime["Difference"]) * 100, axis=1 )
 
+roicTime.to_csv(path_or_buf="./CSV/test3.csv")
+roicTime
 plt.plot(roicTime.Values,roicTime.Percentage)
 plt.show()
 

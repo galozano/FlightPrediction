@@ -1,5 +1,5 @@
 # FlightPrediction
-Simple script that predicts flight time and probability of delay.
+Simple script that predicts flight time and probability of delay for local (USA) flights.
 
 #Description of Files and Folders
 
